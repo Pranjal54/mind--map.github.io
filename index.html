@@ -1,11 +1,22 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Day Planner</title>
   <style>
     body {
       
-      background: linear-gradient(135deg, #2980b9, #3498db);
+      /* background: url('https://source.unsplash.com/1920x1080/?nature,landscape') center/cover;
+      font-family: 'Helvetica', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh; */
+      background-image: url("https://as1.ftcdn.net/v2/jpg/04/48/57/28/1000_F_448572837_oVzK9uVh3O2iu7oXPzM6LKv9RFsI4Lt1.jpg");
+      background-color: #f0f0f0;
       font-family: 'Helvetica', sans-serif;
       margin: 0;
       padding: 0;
@@ -14,7 +25,8 @@
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-       
+       background-repeat: no-repeat;
+       background-size: cover;
     }
 
     .content-container {
@@ -58,6 +70,7 @@
     .task-node,
     .sub-task-node {
       position: absolute;
+      
       background-color: #fff;
       border-radius: 50%;
       padding: 10px;
@@ -69,7 +82,7 @@
       flex-wrap: wrap;
       transform: translate(-50%, -50%); /* Center the node */
       animation: fadeIn 0.5s ease-in-out;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
       animation: pulse 2s ease-in-out infinite;
       transition: background-color 0.3s ease, transform 0.3s ease;
       transition: transform 0.3s ease;
@@ -259,7 +272,8 @@
     @media (max-width: 600px) {
       /* Adjust container padding and top buttons layout */
       #mindmap-container {
-        padding-top: 50px;
+        padding-top: 200px;
+        padding-bottom: 70px; /* Add more padding at the bottom for button visibility */
       }
 
       .top-buttons {
@@ -270,23 +284,39 @@
       .button1 {
         margin-bottom: 10px;
         width: 120px;
+        font-size: 12px;
+        padding: 8px 12px; /* Add more padding for touch-friendly interactions */
+      }
+
+      /* Add top margin for the "Zoom Out" button */
+      .button1:first-child {
+        margin-top: 100px;
       }
 
       .add-remove-buttons {
-        justify-content: space-between;
+        justify-content: center; /* Center the Add Task button on smaller screens */
         margin-top: 20px;
+        margin-bottom: 20px;
       }
 
       .task-node {
-        width: 70px;
-        height: 70px;
-        font-size: 12px;
+        width: 80px; /* Increase node size to accommodate touch interactions */
+        height: 80px;
+        font-size: 14px; /* Increase font size for better readability */
       }
 
       .sub-task-node {
-        width: 50px;
-        height: 50px;
-        font-size: 10px;
+        width: 60px; /* Increase node size to accommodate touch interactions */
+        height: 60px;
+        font-size: 12px; /* Increase font size for better readability */
+      }
+
+      .line {
+        width: 2px;
+      }
+
+      h1 {
+        font-size: 24px; /* Decrease heading font size for better fit */
       }
     }
 
@@ -303,7 +333,7 @@
       }
 
       .button {
-        width: 140px; /* Increase button width for better touch interaction */
+        width: 160px; /* Increase button width for better touch interaction */
         margin-bottom: 10px; /* Add space between buttons */
       }
 
@@ -312,14 +342,14 @@
       }
 
       .task-node {
-        width: 100px;
-        height: 100px;
+        width: 120px;
+        height: 120px;
         font-size: 16px; /* Increase font size for better readability */
       }
 
       .sub-task-node {
-        width: 80px;
-        height: 80px;
+        width: 100px;
+        height: 100px;
         font-size: 14px; /* Increase font size for better readability */
       }
     }
@@ -344,6 +374,7 @@
     let offsetX = 0;
     let offsetY = 0;
     let scale = 1;
+    let baseScale = 1;
     let zoomStep = 0.1;
 
     let taskNodes = [];
@@ -356,31 +387,16 @@
         selectedNode = event.target;
         offsetX = event.clientX - selectedNode.getBoundingClientRect().left;
         offsetY = event.clientY - selectedNode.getBoundingClientRect().top;
-        (event.type === 'mousedown' && event.button === 0) || // For mouse events
-      (event.type === 'touchstart' && event.touches.length === 1) // For touch events
-
-        // Prevent text selection during dragging
         document.body.classList.add('no-select');
-
-        // Prevent the node from being affected by pointer events
         selectedNode.style.pointerEvents = 'none';
-
-        // Attach the mouseup event listener to the selected node
         selectedNode.addEventListener('mouseup', releaseDrag);
       }
-
-      
     }
 
     function moveNode(event) {
       if (selectedNode !== null) {
-        const x = (event.clientX - offsetX) / scale; // Adjust for the current scale
-        const y = (event.clientY - offsetY) / scale; // Adjust for the current scale
-        event.preventDefault(); // Prevent default touch behavior
-        const clientX = event.type === 'mousemove' ? event.clientX : event.touches[0].clientX;
-      const clientY = event.type === 'mousemove' ? event.clientY : event.touches[0].clientY;
-
-
+        const x = (event.clientX - offsetX) / scale;
+        const y = (event.clientY - offsetY) / scale;
         selectedNode.style.left = `${x}px`;
         selectedNode.style.top = `${y}px`;
       }
@@ -389,9 +405,37 @@
     function releaseDrag() {
       selectedNode.style.pointerEvents = 'auto';
       selectedNode = null;
-      event.preventDefault();
+      document.body.classList.remove('no-select');
+    }
 
-      // Allow text selection after releasing the node
+    function startTouchDrag(event) {
+      if (
+        event.target.classList.contains('task-node') &&
+        !event.target.classList.contains('disable-drag')
+      ) {
+        selectedNode = event.target;
+        const touch = event.touches[0];
+        offsetX = touch.clientX - selectedNode.getBoundingClientRect().left;
+        offsetY = touch.clientY - selectedNode.getBoundingClientRect().top;
+        document.body.classList.add('no-select');
+        selectedNode.style.pointerEvents = 'none';
+        selectedNode.addEventListener('touchend', releaseTouchDrag);
+      }
+    }
+
+    function moveTouchNode(event) {
+      if (selectedNode !== null) {
+        const touch = event.touches[0];
+        const x = (touch.clientX - offsetX) / scale;
+        const y = (touch.clientY - offsetY) / scale;
+        selectedNode.style.left = `${x}px`;
+        selectedNode.style.top = `${y}px`;
+      }
+    }
+
+    function releaseTouchDrag() {
+      selectedNode.style.pointerEvents = 'auto';
+      selectedNode = null;
       document.body.classList.remove('no-select');
     }
 
@@ -407,13 +451,25 @@
     }
 
     function exportPlanner() {
-      // Code for exporting the day planner data...
-      // ...
+      const plannerData = {
+        taskNodes: taskNodes.map(taskNode => ({
+          title: taskNode.title,
+          subTasks: taskNode.subTasks.map(subTaskNode => ({ title: subTaskNode.title }))
+        }))
+      };
+      const json = JSON.stringify(plannerData, null, 2);
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'day_planner.json';
+      a.click();
+      URL.revokeObjectURL(url);
     }
 
     function zoom(direction) {
       const newScale = scale + direction * zoomStep;
-      if (newScale >= 0.1 && newScale <= 3) {
+      if (newScale >= 0.001 && newScale <= 100) {
         scale = newScale;
         document.getElementById('mindmap-container').style.transform = `scale(${scale})`;
       }
@@ -421,9 +477,7 @@
 
     function addTask() {
       const taskNode = createTaskNode();
-
       taskNodes.push(taskNode);
-
       renderTaskNodes();
     }
 
@@ -431,6 +485,7 @@
       const node = document.createElement('div');
       node.classList.add('task-node');
       node.addEventListener('mousedown', startDrag);
+      node.addEventListener('touchstart', startTouchDrag);
 
       const taskNode = {
         element: node,
@@ -658,13 +713,13 @@
     document.addEventListener('mousemove', moveNode);
     document.addEventListener('mouseup', releaseDrag);
     document.addEventListener('wheel', handleZoom);
-    document.getElementById('mind-map').addEventListener('touchstart', startDrag);
-    document.addEventListener('touchmove', moveNode);
-    document.addEventListener('touchend', releaseDrag);
-    document.getElementById('mind-map').addEventListener('touchstart', startDrag);
-  document.addEventListener('touchmove', moveNode);
-  document.addEventListener('touchend', releaseDrag);
+    document.getElementById('mind-map').addEventListener('touchstart', startTouchDrag);
+    document.addEventListener('touchmove', moveTouchNode);
+    document.addEventListener('touchend', releaseTouchDrag);
     renderTaskNodes();
   </script>
 </body>
-</html>
+</html> 
+
+
+
