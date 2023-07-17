@@ -4,19 +4,21 @@
   <title>Day Planner</title>
   <style>
     body {
-      background-image: url(../assets/images.png);
-      background-repeat: no-repeat;
-      background-size: cover;
-      font-family: 'Ysabeau Infant', sans-serif;
+      
+      background: linear-gradient(135deg, #2980b9, #3498db);
+      font-family: 'Helvetica', sans-serif;
       margin: 0;
-      width: 100%;
-      height: 100%;
-      background-color: #f1f1f1;
-      font-family: 'Ysabeau Infant', sans-serif;
-      margin: 0;
-      width: 100%;
-      height: 100%;
-      background-image: linear-gradient(135deg, #f1f1f1, #e0e0e0);
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+       
+    }
+
+    .content-container {
+      position: relative;
     }
 
     .no-select {
@@ -28,14 +30,33 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      height: calc(100% - 120px); /* Adjust the height to leave space for buttons and title */
+      height: 60vh;
       width: 100%;
-      padding: 20px;
-      box-sizing: border-box;
-      overflow: visible; /* Change to 'visible' to enable drag and drop */
+      max-width: 1200px; /* Set a maximum width to prevent excessive expansion on larger screens */
+      /* background-color: rgba(255, 255, 255, 0.7); */
+      border-radius: 10px;
+      /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); */
+      overflow: hidden;
+      padding: 10px; /* Add some padding to create space between the content and container edges */
+      box-sizing: border-box; /* Include padding in the element's total width */
     }
 
-    .task-node {
+    
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .task-node,
+    .sub-task-node {
       position: absolute;
       background-color: #fff;
       border-radius: 50%;
@@ -50,35 +71,14 @@
       animation: fadeIn 0.5s ease-in-out;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.1);
       animation: pulse 2s ease-in-out infinite;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      transition: transform 0.3s ease;
     }
 
-    @keyframes pulse {
-      0% {
-        transform: scale(1);
-      }
-      50% {
-        transform: scale(1.1);
-      }
-      100% {
-        transform: scale(1);
-      }
-    }
-
-    .sub-task-node {
-      position: absolute;
-      background-color: #fff;
-      border-radius: 50%;
-      padding: 10px;
-      text-align: center;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, .3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
-      transform: translate(-50%, -50%); /* Center the sub-task node */
-      animation: scaleIn 0.5s ease-in-out;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.1);
-      animation: rotateIn 1s ease-in-out;
+    .task-node:hover,
+    .sub-task-node:hover {
+      background-color: #f1c40f;
+      transform: scale(1.05);
     }
 
     @keyframes fadeIn {
@@ -100,28 +100,39 @@
     }
 
     h1 {
-      text-align: center;
-      font-size: 50px;
-      font-weight: bolder;
-      margin-top: -10px;
-      text-align: center;
-      font-size: 50px;
-      font-weight: bold;
-      margin-top: 20px;
-      color: #333;
+      font-size: 36px;
+      color: #fff;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      margin: 0;
+      padding: 20px 0;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
     }
 
-    button {
-      background-color: black;
-      color: white;
-      border-radius: 5px;
-      border: 2px solid black;
-      height: fit-content;
-      width: 150px;
-      line-height: 20px;
-      padding: 5px;
-      transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+    .top-buttons {
+      position: absolute;
+      top: 0;
+      right: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 40px;
+    }
+
+    .button1{
+      background-color: #fff;
+      color: #333;
+      border-radius: 8px;
+      border: 2px solid #fff;
+      height: 40px;
+      width: 100px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.8s ease, color 0.8s ease, transform 0.8s ease;
+      margin-left: 10px;
     }
 
     @keyframes rotateIn {
@@ -135,6 +146,8 @@
       }
     }
 
+
+
     .button1:hover,
     .button2:hover,
     .button3:hover,
@@ -142,7 +155,7 @@
     .button5:hover {
       cursor: pointer;
       border-radius: 5px;
-      border: 2px solid black;
+      border: 0px ;
       height: fit-content;
       width: 155px;
       line-height: 25px;
@@ -150,13 +163,12 @@
       transition: 0.5s;
       font-weight: 700;
       background: linear-gradient(45deg, #64b5f6, #1e88e5);
+      background-color: #333;
+      color: #fff;
+      transform: scale(1.05);
     }
 
-    .top-buttons {
-      display: flex;
-      justify-content: space-around;
-      margin-top: 20px;
-    }
+    
 
     .add-remove-buttons {
       display: flex;
@@ -240,7 +252,74 @@
         font-size: 12px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.1);
       }
+
+      
     }
+
+    @media (max-width: 600px) {
+      /* Adjust container padding and top buttons layout */
+      #mindmap-container {
+        padding-top: 50px;
+      }
+
+      .top-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .button1 {
+        margin-bottom: 10px;
+        width: 120px;
+      }
+
+      .add-remove-buttons {
+        justify-content: space-between;
+        margin-top: 20px;
+      }
+
+      .task-node {
+        width: 70px;
+        height: 70px;
+        font-size: 12px;
+      }
+
+      .sub-task-node {
+        width: 50px;
+        height: 50px;
+        font-size: 10px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .content-container {
+        width: 90%; /* Adjust the width for smaller screens */
+      }
+
+      .top-buttons {
+        justify-content: center; /* Center the buttons on smaller screens */
+      }
+
+      .button {
+        width: 100px; /* Reduce button width on smaller screens */
+      }
+
+      #mindmap-container {
+        height: 50vh; /* Reduce the height of the container on smaller screens */
+      }
+
+      .task-node {
+        width: 80px;
+        height: 80px;
+        font-size: 14px;
+      }
+
+      .sub-task-node {
+        width: 60px;
+        height: 60px;
+        font-size: 12px;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -566,6 +645,9 @@
     document.addEventListener('mousemove', moveNode);
     document.addEventListener('mouseup', releaseDrag);
     document.addEventListener('wheel', handleZoom);
+    document.getElementById('mind-map').addEventListener('touchstart', startDrag);
+    document.addEventListener('touchmove', moveNode);
+    document.addEventListener('touchend', releaseDrag);
     renderTaskNodes();
   </script>
 </body>
