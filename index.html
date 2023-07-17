@@ -389,6 +389,7 @@
     function releaseDrag() {
       selectedNode.style.pointerEvents = 'auto';
       selectedNode = null;
+      event.preventDefault();
 
       // Allow text selection after releasing the node
       document.body.classList.remove('no-select');
