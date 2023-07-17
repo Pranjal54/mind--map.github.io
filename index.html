@@ -356,6 +356,8 @@
         selectedNode = event.target;
         offsetX = event.clientX - selectedNode.getBoundingClientRect().left;
         offsetY = event.clientY - selectedNode.getBoundingClientRect().top;
+        (event.type === 'mousedown' && event.button === 0) || // For mouse events
+      (event.type === 'touchstart' && event.touches.length === 1) // For touch events
 
         // Prevent text selection during dragging
         document.body.classList.add('no-select');
@@ -366,12 +368,18 @@
         // Attach the mouseup event listener to the selected node
         selectedNode.addEventListener('mouseup', releaseDrag);
       }
+
+      
     }
 
     function moveNode(event) {
       if (selectedNode !== null) {
         const x = (event.clientX - offsetX) / scale; // Adjust for the current scale
         const y = (event.clientY - offsetY) / scale; // Adjust for the current scale
+        event.preventDefault(); // Prevent default touch behavior
+        const clientX = event.type === 'mousemove' ? event.clientX : event.touches[0].clientX;
+      const clientY = event.type === 'mousemove' ? event.clientY : event.touches[0].clientY;
+
 
         selectedNode.style.left = `${x}px`;
         selectedNode.style.top = `${y}px`;
@@ -652,6 +660,9 @@
     document.getElementById('mind-map').addEventListener('touchstart', startDrag);
     document.addEventListener('touchmove', moveNode);
     document.addEventListener('touchend', releaseDrag);
+    document.getElementById('mind-map').addEventListener('touchstart', startDrag);
+  document.addEventListener('touchmove', moveNode);
+  document.addEventListener('touchend', releaseDrag);
     renderTaskNodes();
   </script>
 </body>
