@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,19 +5,8 @@
   <title>Day Planner</title>
   <style>
     body {
-      
-      /* background: url('https://source.unsplash.com/1920x1080/?nature,landscape') center/cover;
-      font-family: 'Helvetica', sans-serif;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh; */
-      background-image: url("https://as1.ftcdn.net/v2/jpg/04/48/57/28/1000_F_448572837_oVzK9uVh3O2iu7oXPzM6LKv9RFsI4Lt1.jpg");
-      background-color: #f0f0f0;
-      font-family: 'Helvetica', sans-serif;
+      background-color: #161616;
+      font-family: 'Poppins', sans-serif;
       margin: 0;
       padding: 0;
       display: flex;
@@ -30,9 +16,29 @@
       min-height: 100vh;
        background-repeat: no-repeat;
        background-size: cover;
+       
     }
 
+    .logo img{
+      height:120px ;
+      width: 150px;
+      margin-left: -750px;
+      margin-top: -10px;
+      margin-bottom: 10px;
+      background-color:transparent ;
+      background: transparent;
+      position: relative;
+      border-radius: 50%;
+    }
     
+    .contact{
+      position: relative;
+      
+      align-items: left;
+      margin-top: 55px;
+      margin-left: 1400px;
+      size: 20px;
+    }
 
     .content-container {
       position: relative;
@@ -61,16 +67,15 @@
     
 
     @keyframes pulse {
-      0% {
-        transform: scale(1);
-      }
-      50% {
-        transform: scale(1.1);
-      }
-      100% {
-        transform: scale(1);
-      }
-    }
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
 
     .task-node,
     .sub-task-node {
@@ -88,23 +93,94 @@
       transform: translate(-50%, -50%); /* Center the node */
       animation: fadeIn 0.5s ease-in-out;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-      animation: pulse 2s ease-in-out infinite;
+      /* animation: pulse 2s ease-in-out infinite;
       transition: background-color 0.3s ease, transform 0.3s ease;
       transition: transform 0.3s ease;
-      transform: translate(-50%, -50%) rotateX(60deg) rotateY(45deg) rotateZ(0deg); /* Initial rotation angles */
+      transform: translate(-50%, -50%) rotateX(60deg) rotateY(45deg) rotateZ(0deg); 
   transition: transform 0.3s ease;
   perspective: 800px;
+  transform-style: preserve-3d; */
+  border: none; /* Remove border */
+  /* ... (other styles) ... */
+  background-color: #3498db;
+  /* ... (other styles) ... */
+  /* Apply 3D transformations for the cube effect */
   transform-style: preserve-3d;
+}
+
+.task-node-cube {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  transform: perspective(600px) rotateX(0deg) rotateY(0deg);
+  transition: transform 0.5s;
+}
+
+.task-node-cube div {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: inherit;
+  opacity: 0.9;
+  border-radius: 8px;
+}
+
+.task-node {
+      /* ... (Your existing styles) ... */
+      background-color: #1d2125;
+      color: white;
+      transition: transform 0.3s ease, background-color 0.3s ease;
+      opacity: 30%;
     }
+
+    .sub-task-node {
+      /* ... (Your existing styles) ... */
+      background-color: #1d2125;
+      color: white;
+      transition: transform 0.3s ease, background-color 0.3s ease;
+      opacity: 30%;
+    }
+
+.task-node-cube .front  { transform: rotateY(0deg) translateZ(50px); }
+.task-node-cube .back   { transform: rotateY(180deg) translateZ(50px); }
+.task-node-cube .right  { transform: rotateY(90deg) translateZ(50px); }
+.task-node-cube .left   { transform: rotateY(-90deg) translateZ(50px); }
+.task-node-cube .top    { transform: rotateX(90deg) translateZ(50px); }
+.task-node-cube .bottom { transform: rotateX(-90deg) translateZ(50px); }
+
+
+
 
     
 
-    .task-node:hover,
-    .sub-task-node:hover {
-      background-color: #f1c40f;
-      transform: scale(1.05);
-      transform: translate(-50%, -50%) rotateX(60deg) rotateY(45deg) rotateZ(30deg);
-    }
+
+    /* Adjust content styles to ensure it fits within the cube */
+.task-node,
+.sub-task-node {
+  font-size: 16px; /* Increase font size for better readability inside the cube */
+  /* ... (other styles) ... */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  
+  animation: fadeIn 0.8s ease forwards;
+}
+
+/* @keyframes rotateAnimation {
+  0%, 100% {
+    transform: translate(-50%, -50%) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  }
+  25% {
+    transform: translate(-50%, -50%) rotateX(90deg) rotateY(0deg) rotateZ(0deg);
+  }
+  50% {
+    transform: translate(-50%, -50%) rotateX(90deg) rotateY(90deg) rotateZ(0deg);
+  }
+  75% {
+    transform: translate(-50%, -50%) rotateX(90deg) rotateY(90deg) rotateZ(90deg);
+  }
+} */
 
     @keyframes fadeIn {
       from {
@@ -131,26 +207,28 @@
       margin: 0;
       padding: 20px 0;
       position: absolute;
-      top: 0;
+      top: 20px;
       left: 50%;
       transform: translateX(-50%);
     }
 
     .top-buttons {
       position: absolute;
-      top: 0;
+      top: 20px;
       right: 20px;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 40px;
+      
     }
 
     .button1{
-      background-color: #fff;
+      /* background-color: #fff; */
+      background-color: #161616;
       color: #333;
       border-radius: 8px;
-      border: 2px solid #fff;
+      border: 2px solid#161616;
       height: 40px;
       width: 100px;
       font-size: 14px;
@@ -158,6 +236,7 @@
       cursor: pointer;
       transition: background-color 0.8s ease, color 0.8s ease, transform 0.8s ease;
       margin-left: 10px;
+      margin-top: 20px;
     }
 
     @keyframes rotateIn {
@@ -171,6 +250,51 @@
       }
     }
 
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .task-node:hover:hover {
+      animation: pulse 1.5s ease-in-out infinite; /* Apply the pulse animation */
+  background-color: #373b4f;
+  
+  opacity: 80%;
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    
+    .sub-task-node:hover{
+      animation: pulse 1.5s ease-in-out infinite; /* Apply the pulse animation */
+      background-color: #373b4f;
+  
+  opacity: 80%;
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    }
+
+   
+
+    .save-button {
+      /* ... (Your existing styles) ... */
+      transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+      background: linear-gradient(45deg, #7f8ff9, #825be6);
+      box-shadow: 1px solid #825be6;
+    }
+
+    .save-button:hover {
+      background-color: #825be6;
+      color: white;
+      transform: scale(1.05);
+    }
 
 
     .button1:hover,
@@ -187,10 +311,15 @@
       font-size: 15px;
       transition: 0.5s;
       font-weight: 700;
-      background: linear-gradient(45deg, #64b5f6, #1e88e5);
+      background: linear-gradient(45deg, #7f8ff9, #825be6);
       background-color: #333;
       color: #fff;
-      transform: scale(1.05);
+      /* transform: scale(1.05); */
+      transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+      transform: scale(1.1);
+      background-color: #9c76e6;
+      color: white;
+      
     }
 
     
@@ -199,39 +328,52 @@
       display: flex;
       justify-content: center;
       margin-top: 10px;
+      
     }
 
     .update-button {
-      background-color: black;
+      
+      background-color: #1d2125;
       color: white;
       border-radius: 5px;
-      border: 2px solid black;
+      border: 2px solid #1d2125;
       height: fit-content;
       width: 120px;
       line-height: 20px;
       padding: 5px;
       margin-right: 5px;
+      transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+    
     }
 
     .update-button:hover {
       cursor: pointer;
-      background-color: #444;
+      /* background-color: #444; */
+      background-color: #373b4f;
+      color: white;
+      transform: scale(1.05);
+      border: 2px solid #373b4f;
     }
 
     .remove-button {
-      background-color: black;
+      background-color:#1d2125;
       color: white;
       border-radius: 5px;
-      border: 2px solid black;
+      border: 2px solid #1d2125;
       height: fit-content;
       width: 120px;
       line-height: 20px;
       padding: 5px;
+      transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+    
     }
 
     .remove-button:hover {
       cursor: pointer;
-      background-color: #ff4d4d;
+      background-color: #373b4f;
+      color: white;
+      transform: scale(1.05);
+      border: 2px solid #373b4f;
     }
 
     .title-input {
@@ -256,12 +398,19 @@
       width: 2px;
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 1368px) {
       #mindmap-container {
         padding-top: 200px;
         padding-bottom: 50px;
         transition: 1s;
         
+      }
+
+      .logo img{
+        height: 50px;
+        width: 50px;
+        margin-left: -400px;
+        margin-top: -200px
       }
 
       .task-node {
@@ -278,6 +427,10 @@
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.1);
       }
 
+      .top-buttons{
+        width: 25px;
+      }
+
       
     }
 
@@ -288,6 +441,13 @@
         padding-bottom: 70px; /* Add more padding at the bottom for button visibility */
       }
 
+      .logo img{
+        height: 50px;
+        width: 50px;
+        margin-left: -180px;
+        margin-top: 10px;
+      }
+
       .top-buttons {
         flex-direction: column;
         align-items: center;
@@ -295,7 +455,7 @@
 
       .button1 {
         margin-bottom: 10px;
-        width: 120px;
+        width: 105px;
         font-size: 12px;
         padding: 8px 12px; /* Add more padding for touch-friendly interactions */
       }
@@ -328,7 +488,7 @@
       }
 
       h1 {
-        font-size: 24px; /* Decrease heading font size for better fit */
+        font-size: 20px; /* Decrease heading font size for better fit */
       }
     }
 
@@ -338,19 +498,31 @@
         padding: 0; /* Remove padding on smaller screens to make better use of space */
       }
 
+      .logo img{
+        height: 50px;
+        width: 50px;
+        margin-left: -130px;
+      }
+
       .top-buttons {
-        flex-direction: column; /* Stack buttons vertically on smaller screens */
+        flex-direction: column;
         align-items: center; /* Center buttons horizontally on smaller screens */
         margin-bottom: 20px; /* Add more space between buttons */
+        margin-top: 30px;
+        width: 10px;
       }
 
       .button {
-        width: 160px; /* Increase button width for better touch interaction */
-        margin-bottom: 10px; /* Add space between buttons */
+        margin-bottom: 10px;
+        width: 25px;
+        font-size: 12px;
+        padding: 8px 12px;
+        
       }
 
       #mindmap-container {
-        height: 70vh; /* Increase the height of the container for better visibility on smaller screens */
+        padding-top: 200px;
+        padding-bottom: 70px; /* Increase the height of the container for better visibility on smaller screens */
       }
 
       .task-node {
@@ -364,20 +536,24 @@
         height: 100px;
         font-size: 14px; /* Increase font size for better readability */
       }
+
+      h1 {
+        font-size: 20px; /* Decrease heading font size for better fit */
+      }
+
     }
 
   </style>
 </head>
 <body>
   <h1>Day Planner</h1>
-
-  <iframe src="https://my.spline.design/untitled-762d8ae72cbbed4b3428fd51eb7aebc8/" style="width: 100%; height: 400px;"></iframe>
-    
-
+  <div class="logo">
+    <img src="assets/mind-maps-low-resolution-logo-white-on-black-background.png" alt="">
+  </div>
   <div class="top-buttons">
     <button class="button1" onclick="zoom(-1)">Zoom Out</button>
     <button class="button1" onclick="zoom(1)">Zoom In</button>
-    <button class="button1" onclick="exportPlanner()">Export Day Plan</button>
+    <!-- <button class="button1" onclick="exportPlanner()">Export Day Plan</button> -->
   </div>
   
 
@@ -389,8 +565,17 @@
     <div id="mind-map"></div>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+  <div id="cube-container"></div>
+  
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.js"></script>
+  <script src="https://kit.fontawesome.com/78014b50e5.js" crossorigin="anonymous"></script>
 
   <script>
+
+    
+
+
     let selectedNode = null;
     let offsetX = 0;
     let offsetY = 0;
@@ -530,6 +715,17 @@
 
       node.appendChild(updateButton);
       node.appendChild(removeButton);
+
+      const addSubTaskButton = document.createElement('button');
+  addSubTaskButton.innerHTML = 'Add Subtask';
+  addSubTaskButton.addEventListener('click', () => addSubTask(taskNode));
+  addSubTaskButton.classList.add('button1'); // Apply the same style as other buttons
+
+  taskNode.addSubTaskButton = addSubTaskButton; // Store reference for later use
+
+  node.appendChild(updateButton);
+  node.appendChild(removeButton);
+  // node.appendChild(addSubTaskButton); // Append the "Add Subtask" button
 
       return taskNode;
     }
@@ -730,6 +926,28 @@
       }
     }
 
+    document.addEventListener('keydown', (event) => {
+  if (selectedNode !== null) {
+    const rotationIncrement = 10; // Adjust rotation speed as needed
+    if (event.key === 'ArrowUp') {
+      rotateCube(selectedNode, -rotationIncrement, 0);
+    } else if (event.key === 'ArrowDown') {
+      rotateCube(selectedNode, rotationIncrement, 0);
+    } else if (event.key === 'ArrowLeft') {
+      rotateCube(selectedNode, 0, -rotationIncrement);
+    } else if (event.key === 'ArrowRight') {
+      rotateCube(selectedNode, 0, rotationIncrement);
+    }
+  }
+});
+
+function rotateCube(selectedNode, rotateX, rotateY) {
+  const cube = selectedNode.querySelector('.task-node-cube');
+  cube.style.transform = `perspective(600px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+}
+
+
+   
     document.getElementById('mind-map').addEventListener('mousedown', startDrag);
     document.addEventListener('mousemove', moveNode);
     document.addEventListener('mouseup', releaseDrag);
